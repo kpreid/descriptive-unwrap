@@ -1,0 +1,116 @@
+name: Build & Test
+
+permissions: {}
+
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - ci
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: 0
+  RUST_BACKTRACE: 1
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        toolchain: [stable, beta, nightly, 1.81.0]
+
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.toolchain != 'stable' }}
+
+    steps:
+    - uses: actions/checkout@v5
+
+    - name: Install Rust toolchain
+      run: |
+          rustup toolchain install "${{ matrix.toolchain }}" --profile=minimal--component=rustfmt
+          rustup override set "${{ matrix.toolchain }}"
+
+    - run: cargo test --no-run
+    - run: cargo test
+
+
+  lint:
+    strategy:
+      fail-fast: false
+      matrix:
+        toolchain: ["stable", "nightly", "beta"]
+
+    runs-on: ubuntu-latest
+    continue-on-error: false
+
+    env:
+      RUSTFLAGS: '-Dwarnings'
+
+    steps:
+    - uses: actions/checkout@v5
+
+    - name: Install Rust toolchain
+      run: |
+          rustup toolchain install "${{ matrix.toolchain }}" --profile=minimal --component=clippy
+          rustup override set "${{ matrix.toolchain }}"
+
+    - name: Lint
+      run: |
+        cargo clippy
+        cargo rustdoc -- -Drustdoc::broken_intra_doc_links
+  
+  fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - run: cargo fmt --check
+
+  # Run mutation testing against the changed code
+  # Based on example from https://mutants.rs/pr-diff.html
+  incremental-mutants:
+    runs-on: ubuntu-latest
+    # Running on push would require more work to determine the base revision
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # Needed to ensure `main` branch is needed
+          fetch-depth: 0
+
+      - uses: Swatinem/rust-cache@v2.8.1
+        with:
+          # Job's likely to fail and yet have useful cache material.
+          cache-on-failure: true
+
+      - run: cargo install --locked cargo-mutants@24.7.1
+
+      - name: Relative diff
+        run: |
+          git branch -av
+          git diff origin/${{ github.base_ref }}.. | tee git.diff
+      
+      - name: Mutants
+        run: cargo mutants --in-diff git.diff -- --all-features
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: mutants-incremental.out
+          path: mutants.out
+
+  semver:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v5
+
+    - name: Check semver
+      uses: obi1kenobi/cargo-semver-checks-action@v2.8
+      # Use workspace target dir for cargo install's build, so that the build will be cached.
+      env:
+        CARGO_TARGET_DIR: target/
+      with:
+        package: "exhaust"
+
