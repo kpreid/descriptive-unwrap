@@ -23,6 +23,10 @@
 #![warn(missing_debug_implementations)]
 #![warn(clippy::pedantic)]
 #![allow(clippy::inline_always)]
+#![allow(
+    clippy::missing_panics_doc,
+    reason = "panicking is the main point of all docs"
+)]
 
 use core::error::Error;
 
@@ -30,7 +34,7 @@ mod panics;
 
 /// Alternatives to [`Result::unwrap()`].
 pub trait ResultUnwrapExt<T, E> {
-    /// When `self` is [`Ok`], teturns the contained value.
+    /// When `self` is [`Ok`], returns the contained value.
     /// If `self` is [`Err`] instead, panics with a message indicating that an error case which
     /// should not have been reached was reached, and which includes the complete error message
     /// and source chain of the error value.
@@ -42,12 +46,7 @@ pub trait ResultUnwrapExt<T, E> {
     ///
     /// This can be used, for example, when using a fallible constructor with a constant:
     ///
-    /// ```rust
-    /// use descriptive_unwrap::ResultUnwrapExt as _;
-    /// use core::num::NonZeroU8;
-    ///
-    /// let ten = NonZeroU8::new(10).err_is_unreachable();
-    /// ```
+    /// TODO: Need an example of a std type with a `Result`-returning fallible constructor
     fn err_is_unreachable(self) -> T;
 
     /// Use this like [`todo!`]:
@@ -84,6 +83,114 @@ impl<T, E: Error> ResultUnwrapExt<T, E> for Result<T, E> {
     #[expect(private_interfaces)]
     fn _this_trait_is_sealed_and_you_cannot_add_implementations_of_it() -> Sealed {
         Sealed
+    }
+}
+
+/// Alternatives to [`Result::unwrap()`].
+pub trait OptionUnwrapExt<T> {
+    /// When `self` is [`Some`], returns the contained value.
+    /// If `self` is [`None`] instead, panics with a message indicating that an error case which
+    /// should not have been reached was reached.
+    ///
+    /// Use this like [`unreachable!`]:
+    /// when you believe that the error case cannot occur.
+    ///
+    /// # Example
+    ///
+    /// This can be used, for example, when using [`Option::take()`] in a situation where you know
+    /// the [`Option`] will never actually be [`None`]:
+    ///
+    /// ```rust
+    /// use descriptive_unwrap::OptionUnwrapExt as _;
+    ///
+    /// let mut option = Some(10);
+    /// let value = option.take().none_is_unreachable();
+    /// ```
+    fn none_is_unreachable(self) -> T;
+
+    /// Use this like [`todo!`]:
+    /// the code is incomplete and missing value handling should be added.
+    fn none_is_todo(self) -> T;
+
+    #[doc(hidden)]
+    #[expect(private_interfaces)]
+    fn _this_trait_is_sealed_and_you_cannot_add_implementations_of_it() -> Sealed;
+}
+
+impl<T> OptionUnwrapExt<T> for Option<T> {
+    #[inline(always)]
+    #[track_caller]
+    fn none_is_unreachable(self) -> T {
+        match self {
+            Some(value) => value,
+            None => panic!("value missing that should always be present"),
+        }
+    }
+
+    #[inline(always)]
+    #[track_caller]
+    fn none_is_todo(self) -> T {
+        match self {
+            Some(value) => value,
+            None => {
+                panic!("handling missing value is not yet implemented")
+            }
+        }
+    }
+
+    #[doc(hidden)]
+    #[expect(private_interfaces)]
+    fn _this_trait_is_sealed_and_you_cannot_add_implementations_of_it() -> Sealed {
+        Sealed
+    }
+}
+
+/// When `option` is [`Some`], returns the contained value.
+/// If `option` is [`None`] instead, panics with a message indicating that an error case which
+/// should not have been reached was reached.
+///
+/// Use this like [`unreachable!`]:
+/// when you believe that the error case cannot occur.
+///
+/// This is identical to the extension trait method [`OptionUnwrapExt::none_is_unreachable()`]
+/// except that it is a `const fn`, and is not a method (so it cannot cause a method name conflict).
+///
+/// # Example
+///
+/// This can be used, for example, when using [`Option::take()`] in a situation where you know
+/// the [`Option`] will never actually be [`None`]:
+///
+/// ```rust
+/// use descriptive_unwrap::none_is_unreachable;
+///
+/// let mut option = Some(10);
+/// let value = none_is_unreachable(option.take());
+/// ```
+#[inline(always)]
+#[track_caller]
+pub const fn none_is_unreachable<T>(option: Option<T>) -> T {
+    match &option {
+        // This unwrap() will never panic.
+        // It is a workaround for lack of feature(const_precise_live_drops);
+        // we borrow Option::unwrap()’s standard library magic powers.
+        Some(_) => option.unwrap(),
+        None => panic!("value missing that should always be present"),
+    }
+}
+
+/// Use this like [`todo!`]:
+/// the code is incomplete and missing value handling should be added.
+#[inline(always)]
+#[track_caller]
+pub const fn none_is_todo<T>(option: Option<T>) -> T {
+    match &option {
+        // This unwrap() will never panic.
+        // It is a workaround for lack of feature(const_precise_live_drops);
+        // we borrow Option::unwrap()’s standard library magic powers.
+        Some(_) => option.unwrap(),
+        None => {
+            panic!("handling missing value is not yet implemented")
+        }
     }
 }
 

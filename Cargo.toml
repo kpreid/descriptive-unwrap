@@ -2,8 +2,8 @@
 name = "descriptive-unwrap"
 description = "Replacements for unwrap() that clarify the specific purpose, and format errors better."
 version = "0.1.0"
-edition = "2021" # latest edition available in 1.81
-rust-version = "1.81" # we need core::error
+edition = "2021" # latest edition available in 1.83
+rust-version = "1.83" # we need core::error and const unwrap()
 repository = "https://github.com/kpreid/descriptive-unwrap/"
 license = "MIT OR Apache-2.0"
 categories = ["rust-patterns", "no-std"]
