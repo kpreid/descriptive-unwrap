@@ -20,7 +20,7 @@ impl fmt::Display for ErrorChain<'_> {
         // Write the source, the source’s source, etc., all with a prefix.
         while let Some(source) = error.source() {
             error = source;
-            write!(fmt, "\n  • {error}")?;
+            write!(fmt, "\n    • {error}")?;
         }
 
         Ok(())

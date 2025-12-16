@@ -1,5 +1,5 @@
 //! Replacements for [`Result::unwrap()`] and [`Option::unwrap()`] whose overall function
-//! is the same, but with clearer names and better formatting.
+//! is the same, but with meaningful names and [`Error`] formatting.
 //!
 //! Each function in this library still panics on [`Err`] or [`None`], but their names document
 //! the intent of the panic: for example, is it a situation that should be impossible, or
@@ -44,11 +44,18 @@ pub trait ResultUnwrapExt<T, E> {
     ///
     /// # Example
     ///
-    /// This can be used, for example, when using a fallible constructor with a constant:
+    /// ```rust
+    /// use descriptive_unwrap::ResultUnwrapExt as _;
+    /// use std::net::IpAddr;
     ///
-    /// TODO: Need an example of a std type with a `Result`-returning fallible constructor
+    /// let constant_addr: IpAddr = "192.168.0.1".parse().err_is_unreachable();
+    /// ```
     fn err_is_unreachable(self) -> T;
 
+    /// When `self` is [`Ok`], returns the contained value.
+    /// If `self` is [`Err`] instead, panics with a message indicating that error handling is
+    /// not yet implemented.
+    ///
     /// Use this like [`todo!`]:
     /// the code is incomplete and error handling should be added.
     fn err_is_todo(self) -> T;
@@ -86,7 +93,7 @@ impl<T, E: Error> ResultUnwrapExt<T, E> for Result<T, E> {
     }
 }
 
-/// Alternatives to [`Result::unwrap()`].
+/// Alternatives to [`Option::unwrap()`].
 pub trait OptionUnwrapExt<T> {
     /// When `self` is [`Some`], returns the contained value.
     /// If `self` is [`None`] instead, panics with a message indicating that an error case which
