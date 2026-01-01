@@ -1,3 +1,6 @@
+[workspace]
+members = ["panic-example-test"]
+
 [package]
 name = "descriptive-unwrap"
 description = "Replacements for unwrap() that clarify the specific purpose, and format errors better."
@@ -7,7 +10,11 @@ rust-version = "1.83" # we need core::error and const unwrap()
 repository = "https://github.com/kpreid/descriptive-unwrap/"
 license = "MIT OR Apache-2.0"
 categories = ["rust-patterns", "no-std"]
-keywords = ["unwrap", "expect", "error"]
+keywords = ["unwrap", "expect", "error", "error-handling"]
+publish = true
 exclude = ["/.github"]
+
+[lib]
+test = false # non-doc tests are external
 
 [dependencies]

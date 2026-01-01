@@ -27,6 +27,10 @@
     clippy::missing_panics_doc,
     reason = "panicking is the main point of all docs"
 )]
+#![allow(
+    clippy::needless_doctest_main,
+    reason = "examples need to be include!()able code for panic-example-test"
+)]
 
 use core::error::Error;
 
@@ -49,6 +53,17 @@ pub trait ResultUnwrapExt<T, E> {
     /// use std::net::IpAddr;
     ///
     /// let constant_addr: IpAddr = "192.168.0.1".parse().err_is_unreachable();
+    /// ```
+    ///
+    /// If instead there is an error, it will panic with a message using the `Display` formatting
+    /// of the error value:
+    ///
+    /// ```rust,should_panic
+    #[doc = include_str!("../doc-example-parts/err_is_unreachable.rs")]
+    /// ```
+    ///
+    /// ```text
+    #[doc = include_str!("../doc-example-parts/err_is_unreachable.stderr")]
     /// ```
     fn err_is_unreachable(self) -> T;
 

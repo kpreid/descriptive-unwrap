@@ -1,4 +1,4 @@
-#![allow(clippy::match_as_ref)]
+//! Tests of the panic messages produced by `descriptive-unwrap` library functions.
 
 use std::error::Error;
 use std::fmt;
@@ -36,6 +36,7 @@ impl fmt::Display for ErrorWithSource {
 }
 
 impl Error for ErrorWithSource {
+    #[expect(clippy::match_as_ref, reason = "prefer this over `as`")]
     fn source(&self) -> Option<&(dyn Error + 'static)> {
         match self.source {
             Some(ref err) => Some(err), // coerces to dyn

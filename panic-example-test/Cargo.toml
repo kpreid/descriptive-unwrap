@@ -1,0 +1,11 @@
+[package]
+name = "panic-example-test"
+description = "Tests for the text produced by using descriptive-unwrap."
+publish = false
+edition = "2024"
+
+[dependencies]
+descriptive-unwrap = { path = "../" }
+
+[dev-dependencies]
+trycmd = { version = "0.15.11" }
