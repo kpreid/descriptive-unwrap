@@ -1,15 +1,21 @@
 //! Replacements for [`Result::unwrap()`] and [`Option::unwrap()`] whose overall function
-//! is the same, but with meaningful names and [`Error`] formatting.
+//! is the same, but with meaningful names and [`Error`] formatting,
+//! for the benefit of developers and users.
 //!
-//! Each function in this library still panics on [`Err`] or [`None`], but their names document
-//! the intent of the panic: for example, is it a situation that should be impossible, or
+//! **For developers:**
+//! Each function in this library panics on [`Err`] or [`None`],
+//! just like `unwrap()` and `expect()` do, but their names document the intent of the panic:
+//! is it a situation that should be impossible, or
 //! is it code whose proper error handling has not been written yet?
 //!
-//! Additionally, when an error is formatted into a panic message, it is formatted using
+//! **For application users:**
+//! When an error is formatted into a panic message, it is formatted using
 //! [`Display`][core::fmt::Display] and [`Error::source()`] instead of [`Debug`], so that errors
 //! can be viewed in their intended human-readable form.
+//! This means that, in the event of an unexpected failure, users are presented with a
+//! cleaner error report more amenable to troubleshooting.
 //!
-//! This library is `no_std` compatible.
+//! This library is `no_std` compatible; it does not depend on `std` or `alloc`.
 
 #![no_std]
 #![forbid(unsafe_code)]
