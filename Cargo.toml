@@ -1,5 +1,6 @@
 [workspace]
 members = ["panic-example-test"]
+default-members = [".", "panic-example-test"]
 
 [package]
 name = "descriptive-unwrap"

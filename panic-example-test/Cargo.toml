@@ -4,6 +4,10 @@ description = "Tests for the text produced by using descriptive-unwrap."
 publish = false
 edition = "2024"
 
+[[bin]]
+name = "panic-example-test"
+test = false # no unit tests
+
 [dependencies]
 descriptive-unwrap = { path = "../" }
 
