@@ -174,6 +174,25 @@ pub trait OptionUnwrapExt<T> {
     ///
     /// Use this like [`todo!`]:
     /// the code is incomplete and missing value handling should be added.
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// use descriptive_unwrap::OptionUnwrapExt as _;
+    ///
+    /// let mut option = Some(10);
+    /// let value = option.take().none_is_todo();
+    /// ```
+    ///
+    /// If [`None`] is found, it will panic:
+    ///
+    /// ```rust,should_panic
+    #[doc = include_str!("../doc-example-parts/none_is_todo.rs")]
+    /// ```
+    ///
+    /// ```text
+    #[doc = include_str!("../doc-example-parts/none_is_todo.stderr")]
+    /// ```
     fn none_is_todo(self) -> T;
 
     #[doc(hidden)]

@@ -3,8 +3,6 @@
 
 #![allow(invalid_from_utf8)]
 
-use descriptive_unwrap::OptionUnwrapExt as _;
-
 fn main() {
     let args_strings: Vec<String> = std::env::args().collect();
     let args_strs: Vec<&str> = args_strings.iter().map(String::as_str).collect();
@@ -12,7 +10,7 @@ fn main() {
     match args_strs[1..] {
         ["descriptive_unwrap::none_is_unreachable"] => none_is_unreachable_fn_example::run(),
         ["Option::none_is_unreachable"] => none_is_unreachable_example::run(),
-        ["Option::none_is_todo"] => None.none_is_todo(),
+        ["Option::none_is_todo"] => none_is_todo_example::run(),
         ["Result::err_is_unreachable"] => err_is_unreachable_example::run(),
         ["Result::err_is_todo"] => err_is_todo_example::run(),
         _ => panic!("unrecognized subcommand: {args_strs:?}"),
@@ -46,6 +44,14 @@ mod none_is_unreachable_example {
 #[allow(unused_variables)]
 mod none_is_unreachable_fn_example {
     include!("../../doc-example-parts/none_is_unreachable_fn.rs");
+    pub fn run() {
+        main()
+    }
+}
+
+#[allow(unused_variables)]
+mod none_is_todo_example {
+    include!("../../doc-example-parts/none_is_todo.rs");
     pub fn run() {
         main()
     }
