@@ -9,6 +9,7 @@ fn main() {
 
     match args_strs[1..] {
         ["descriptive_unwrap::none_is_unreachable"] => none_is_unreachable_fn_example::run(),
+        ["descriptive_unwrap::none_is_todo"] => none_is_todo_fn_example::run(),
         ["Option::none_is_unreachable"] => none_is_unreachable_example::run(),
         ["Option::none_is_todo"] => none_is_todo_example::run(),
         ["Result::err_is_unreachable"] => err_is_unreachable_example::run(),
@@ -52,6 +53,14 @@ mod none_is_unreachable_fn_example {
 #[allow(unused_variables)]
 mod none_is_todo_example {
     include!("../../doc-example-parts/none_is_todo.rs");
+    pub fn run() {
+        main()
+    }
+}
+
+#[allow(unused_variables)]
+mod none_is_todo_fn_example {
+    include!("../../doc-example-parts/none_is_todo_fn.rs");
     pub fn run() {
         main()
     }

@@ -281,6 +281,24 @@ pub const fn none_is_unreachable<T>(option: Option<T>) -> T {
 /// This is identical to the extension trait method [`OptionUnwrapExt::none_is_todo()`]
 /// except that it is a `const fn`, and is not a method (so it cannot cause a method name conflict).
 ///
+/// # Example
+///
+/// ```rust
+/// use descriptive_unwrap::none_is_todo;
+///
+/// let mut option = Some(10);
+/// let value = none_is_todo(option.take());
+/// ```
+///
+/// If [`None`] is found, it will panic:
+///
+/// ```rust,should_panic
+#[doc = include_str!("../doc-example-parts/none_is_todo_fn.rs")]
+/// ```
+///
+/// ```text
+#[doc = include_str!("../doc-example-parts/none_is_todo_fn.stderr")]
+/// ```
 #[inline(always)]
 #[track_caller]
 pub const fn none_is_todo<T>(option: Option<T>) -> T {
