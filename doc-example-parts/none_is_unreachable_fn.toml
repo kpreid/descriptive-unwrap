@@ -1,0 +1,4 @@
+bin.name = "panic-example-test"
+env.inherit = false
+status = "failed"
+args = ["descriptive_unwrap::none_is_unreachable"]

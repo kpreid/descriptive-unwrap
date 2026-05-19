@@ -139,8 +139,8 @@ impl<T, E: Error> ResultUnwrapExt<T, E> for Result<T, E> {
 /// Alternatives to [`Option::unwrap()`].
 pub trait OptionUnwrapExt<T> {
     /// When `self` is [`Some`], returns the contained value.
-    /// If `self` is [`None`] instead, panics with a message indicating that an error case which
-    /// should not have been reached was reached.
+    /// If `self` is [`None`] instead, panics with the message
+    /// “value missing that should always be present”.
     ///
     /// Use this like [`unreachable!`]:
     /// when you believe that the error case cannot occur.
@@ -210,8 +210,8 @@ impl<T> OptionUnwrapExt<T> for Option<T> {
 }
 
 /// When `option` is [`Some`], returns the contained value.
-/// If `option` is [`None`] instead, panics with a message indicating that an error case which
-/// should not have been reached was reached.
+/// If `option` is [`None`] instead, panics with the message
+/// “value missing that should always be present”.
 ///
 /// Use this like [`unreachable!`]:
 /// when you believe that the error case cannot occur.
@@ -229,6 +229,16 @@ impl<T> OptionUnwrapExt<T> for Option<T> {
 ///
 /// let mut option = Some(10);
 /// let value = none_is_unreachable(option.take());
+/// ```
+///
+/// If [`None`] is found, it will panic:
+///
+/// ```rust,should_panic
+#[doc = include_str!("../doc-example-parts/none_is_unreachable_fn.rs")]
+/// ```
+///
+/// ```text
+#[doc = include_str!("../doc-example-parts/none_is_unreachable_fn.stderr")]
 /// ```
 #[inline(always)]
 #[track_caller]
