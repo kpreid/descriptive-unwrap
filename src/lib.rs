@@ -156,6 +156,16 @@ pub trait OptionUnwrapExt<T> {
     /// let mut option = Some(10);
     /// let value = option.take().none_is_unreachable();
     /// ```
+    ///
+    /// If [`None`] is found, it will panic:
+    ///
+    /// ```rust,should_panic
+    #[doc = include_str!("../doc-example-parts/none_is_unreachable.rs")]
+    /// ```
+    ///
+    /// ```text
+    #[doc = include_str!("../doc-example-parts/none_is_unreachable.stderr")]
+    /// ```
     fn none_is_unreachable(self) -> T;
 
     /// When `option` is [`Some`], returns the contained value.
