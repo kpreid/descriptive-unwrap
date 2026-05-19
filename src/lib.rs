@@ -158,6 +158,10 @@ pub trait OptionUnwrapExt<T> {
     /// ```
     fn none_is_unreachable(self) -> T;
 
+    /// When `option` is [`Some`], returns the contained value.
+    /// If `option` is [`None`] instead, panics with the message
+    /// “handling missing value is not yet implemented”.
+    ///
     /// Use this like [`todo!`]:
     /// the code is incomplete and missing value handling should be added.
     fn none_is_todo(self) -> T;
@@ -228,8 +232,16 @@ pub const fn none_is_unreachable<T>(option: Option<T>) -> T {
     }
 }
 
+/// When `option` is [`Some`], returns the contained value.
+/// If `option` is [`None`] instead, panics with the message
+/// “handling missing value is not yet implemented”.
+///
 /// Use this like [`todo!`]:
 /// the code is incomplete and missing value handling should be added.
+///
+/// This is identical to the extension trait method [`OptionUnwrapExt::none_is_todo()`]
+/// except that it is a `const fn`, and is not a method (so it cannot cause a method name conflict).
+///
 #[inline(always)]
 #[track_caller]
 pub const fn none_is_todo<T>(option: Option<T>) -> T {
