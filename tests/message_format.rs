@@ -57,7 +57,7 @@ fn unreachable_with_chain() {
     let error = ErrorWithSource::new("foo").wrap("bar").wrap("baz");
     assert_eq!(
         catch_string(|| Err(error).err_is_unreachable()),
-        "unreachable error case reached: baz\n    • bar\n    • foo"
+        "unreachable error case reached:\n    ↳ baz\n    ↳ bar\n    ↳ foo"
     );
 }
 
@@ -66,6 +66,6 @@ fn todo_with_chain() {
     let error = ErrorWithSource::new("foo").wrap("bar").wrap("baz");
     assert_eq!(
         catch_string(|| Err(error).err_is_todo()),
-        "handling this error is not yet implemented: baz\n    • bar\n    • foo"
+        "handling this error is not yet implemented:\n    ↳ baz\n    ↳ bar\n    ↳ foo"
     );
 }

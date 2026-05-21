@@ -1,4 +1,5 @@
 
 thread 'main' ([..]) panicked at [..]/err_is_todo.rs:5:46:
-handling this error is not yet implemented: invalid utf-8 sequence of 1 bytes from index 0
+handling this error is not yet implemented:
+    ↳ invalid utf-8 sequence of 1 bytes from index 0
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
