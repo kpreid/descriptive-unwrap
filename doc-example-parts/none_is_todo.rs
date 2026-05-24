@@ -1,6 +1,5 @@
 use descriptive_unwrap::OptionUnwrapExt as _;
 
-fn main() {
-    let mut option: Option<i32> = None;
-    let value = option.take().none_is_todo();
-}
+
+let mut option: Option<i32> = None;
+let value = option.take().none_is_todo();
