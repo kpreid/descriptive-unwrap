@@ -13,6 +13,7 @@ use std::path::Path;
 
 fn main() {
     let part_directory = Path::new(&env!("CARGO_MANIFEST_DIR")).join("../doc-example-parts/");
+    rerun_if_path_changed(&part_directory);
 
     let mut output_file = fs::File::create(
         Path::new(&std::env::var("OUT_DIR").expect("OUT_DIR should be set"))
@@ -36,9 +37,11 @@ fn main() {
         part_prefix_path.set_file_name(format!("{part_name_stem}_prefix.rs"));
 
         let part_failing_contents =
-            unhide(fs::read_to_string(part_failing_path).expect("reading part _failing file"));
+            unhide(fs::read_to_string(&part_failing_path).expect("reading part _failing file"));
         let part_prefix_contents =
-            unhide(fs::read_to_string(part_prefix_path).expect("reading part _prefix file"));
+            unhide(fs::read_to_string(&part_prefix_path).expect("reading part _prefix file"));
+        rerun_if_path_changed(&part_failing_path);
+        rerun_if_path_changed(&part_prefix_path);
 
         // TODO: Implement processing of "#" prefixes so that we can have hidden lines.
 
@@ -66,4 +69,11 @@ fn unhide(input: String) -> String {
         }
     }
     output
+}
+
+fn rerun_if_path_changed(path: &Path) {
+    println!(
+        "cargo::rerun-if-changed={}",
+        path.to_str().expect("all paths must be UTF-8")
+    );
 }
