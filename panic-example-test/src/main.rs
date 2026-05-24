@@ -10,10 +10,10 @@ fn main() {
     match args_strs[1..] {
         ["descriptive_unwrap::none_is_unreachable"] => generated::none_is_unreachable_fn(),
         ["descriptive_unwrap::none_is_todo"] => generated::none_is_todo_fn(),
-        ["Option::none_is_unreachable"] => generated::none_is_unreachable(),
-        ["Option::none_is_todo"] => generated::none_is_todo(),
-        ["Result::err_is_unreachable"] => generated::err_is_unreachable(),
-        ["Result::err_is_todo"] => generated::err_is_todo(),
+        ["Option::none_is_unreachable"] => generated::none_is_unreachable_trait(),
+        ["Option::none_is_todo"] => generated::none_is_todo_trait(),
+        ["Result::err_is_unreachable"] => generated::err_is_unreachable_trait(),
+        ["Result::err_is_todo"] => generated::err_is_todo_trait(),
         _ => panic!("unrecognized subcommand: {args_strs:?}"),
     }
 }

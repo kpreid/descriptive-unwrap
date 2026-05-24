@@ -55,8 +55,7 @@ pub trait ResultUnwrapExt<T, E> {
     /// # Example
     ///
     /// ```rust
-    /// use descriptive_unwrap::ResultUnwrapExt as _;
-    /// use std::net::IpAddr;
+    #[doc = include_str!("../doc-example-parts/err_is_unreachable_trait_prefix.rs")]
     ///
     /// let constant_addr: IpAddr = "192.168.0.1".parse().err_is_unreachable();
     /// ```
@@ -65,11 +64,13 @@ pub trait ResultUnwrapExt<T, E> {
     /// of the error value:
     ///
     /// ```rust,should_panic
-    #[doc = include_str!("../doc-example-parts/err_is_unreachable.rs")]
+    #[doc = include_str!("../doc-example-parts/err_is_unreachable_trait_prefix.rs")]
+    ///
+    #[doc = include_str!("../doc-example-parts/err_is_unreachable_trait_failing.rs")]
     /// ```
     ///
     /// ```text
-    #[doc = include_str!("../doc-example-parts/err_is_unreachable.stderr")]
+    #[doc = include_str!("../doc-example-parts/err_is_unreachable_trait.stderr")]
     /// ```
     fn err_is_unreachable(self) -> T;
 
@@ -83,7 +84,7 @@ pub trait ResultUnwrapExt<T, E> {
     /// # Example
     ///
     /// ```rust
-    /// use descriptive_unwrap::ResultUnwrapExt as _;
+    #[doc = include_str!("../doc-example-parts/err_is_todo_trait_prefix.rs")]
     ///
     /// let input = [0x48, 0x65, 0x6c, 0x6c, 0x6f];
     ///
@@ -95,11 +96,13 @@ pub trait ResultUnwrapExt<T, E> {
     /// of the error value:
     ///
     /// ```rust,should_panic
-    #[doc = include_str!("../doc-example-parts/err_is_todo.rs")]
+    #[doc = include_str!("../doc-example-parts/err_is_todo_trait_prefix.rs")]
+    ///
+    #[doc = include_str!("../doc-example-parts/err_is_todo_trait_failing.rs")]
     /// ```
     ///
     /// ```text
-    #[doc = include_str!("../doc-example-parts/err_is_todo.stderr")]
+    #[doc = include_str!("../doc-example-parts/err_is_todo_trait.stderr")]
     /// ```
     fn err_is_todo(self) -> T;
 
@@ -151,7 +154,7 @@ pub trait OptionUnwrapExt<T> {
     /// the [`Option`] will never actually be [`None`]:
     ///
     /// ```rust
-    /// use descriptive_unwrap::OptionUnwrapExt as _;
+    #[doc = include_str!("../doc-example-parts/none_is_unreachable_trait_prefix.rs")]
     ///
     /// let mut option = Some(10);
     /// let value = option.take().none_is_unreachable();
@@ -160,11 +163,13 @@ pub trait OptionUnwrapExt<T> {
     /// If [`None`] is found, it will panic:
     ///
     /// ```rust,should_panic
-    #[doc = include_str!("../doc-example-parts/none_is_unreachable.rs")]
+    #[doc = include_str!("../doc-example-parts/none_is_unreachable_trait_prefix.rs")]
+    ///
+    #[doc = include_str!("../doc-example-parts/none_is_unreachable_trait_failing.rs")]
     /// ```
     ///
     /// ```text
-    #[doc = include_str!("../doc-example-parts/none_is_unreachable.stderr")]
+    #[doc = include_str!("../doc-example-parts/none_is_unreachable_trait.stderr")]
     /// ```
     fn none_is_unreachable(self) -> T;
 
@@ -178,7 +183,7 @@ pub trait OptionUnwrapExt<T> {
     /// # Example
     ///
     /// ```rust
-    /// use descriptive_unwrap::OptionUnwrapExt as _;
+    #[doc = include_str!("../doc-example-parts/none_is_todo_trait_prefix.rs")]
     ///
     /// let mut option = Some(10);
     /// let value = option.take().none_is_todo();
@@ -187,11 +192,13 @@ pub trait OptionUnwrapExt<T> {
     /// If [`None`] is found, it will panic:
     ///
     /// ```rust,should_panic
-    #[doc = include_str!("../doc-example-parts/none_is_todo.rs")]
+    #[doc = include_str!("../doc-example-parts/none_is_todo_trait_prefix.rs")]
+    ///
+    #[doc = include_str!("../doc-example-parts/none_is_todo_trait_failing.rs")]
     /// ```
     ///
     /// ```text
-    #[doc = include_str!("../doc-example-parts/none_is_todo.stderr")]
+    #[doc = include_str!("../doc-example-parts/none_is_todo_trait.stderr")]
     /// ```
     fn none_is_todo(self) -> T;
 
@@ -244,7 +251,7 @@ impl<T> OptionUnwrapExt<T> for Option<T> {
 /// the [`Option`] will never actually be [`None`]:
 ///
 /// ```rust
-/// use descriptive_unwrap::none_is_unreachable;
+#[doc = include_str!("../doc-example-parts/none_is_unreachable_fn_prefix.rs")]
 ///
 /// let mut option = Some(10);
 /// let value = none_is_unreachable(option.take());
@@ -253,7 +260,9 @@ impl<T> OptionUnwrapExt<T> for Option<T> {
 /// If [`None`] is found, it will panic:
 ///
 /// ```rust,should_panic
-#[doc = include_str!("../doc-example-parts/none_is_unreachable_fn.rs")]
+#[doc = include_str!("../doc-example-parts/none_is_unreachable_fn_prefix.rs")]
+///
+#[doc = include_str!("../doc-example-parts/none_is_unreachable_fn_failing.rs")]
 /// ```
 ///
 /// ```text
@@ -284,7 +293,7 @@ pub const fn none_is_unreachable<T>(option: Option<T>) -> T {
 /// # Example
 ///
 /// ```rust
-/// use descriptive_unwrap::none_is_todo;
+#[doc = include_str!("../doc-example-parts/none_is_todo_fn_prefix.rs")]
 ///
 /// let mut option = Some(10);
 /// let value = none_is_todo(option.take());
@@ -293,7 +302,9 @@ pub const fn none_is_unreachable<T>(option: Option<T>) -> T {
 /// If [`None`] is found, it will panic:
 ///
 /// ```rust,should_panic
-#[doc = include_str!("../doc-example-parts/none_is_todo_fn.rs")]
+#[doc = include_str!("../doc-example-parts/none_is_todo_fn_prefix.rs")]
+///
+#[doc = include_str!("../doc-example-parts/none_is_todo_fn_failing.rs")]
 /// ```
 ///
 /// ```text

@@ -23,25 +23,47 @@ fn main() {
     for entry in fs::read_dir(part_directory).expect("open part directory") {
         let entry = entry.expect("read part directory");
 
-        let name = entry
+        let part_failing_path = entry.path();
+        let failing_name = entry
             .file_name()
             .into_string()
             .expect("file name should be UTF-8");
-        let Some(part_name_stem) = name.strip_suffix(".rs") else {
+        let Some(part_name_stem) = failing_name.strip_suffix("_failing.rs") else {
             continue;
         };
-        let part_contents = fs::read_to_string(entry.path()).expect("reading part file");
+
+        let mut part_prefix_path = part_failing_path.clone();
+        part_prefix_path.set_file_name(format!("{part_name_stem}_prefix.rs"));
+
+        let part_failing_contents =
+            unhide(fs::read_to_string(part_failing_path).expect("reading part _failing file"));
+        let part_prefix_contents =
+            unhide(fs::read_to_string(part_prefix_path).expect("reading part _prefix file"));
 
         // TODO: Implement processing of "#" prefixes so that we can have hidden lines.
 
         writeln!(
             output_file,
             "pub fn {part_name_stem}() {{\n\
-            {part_contents}\n\
+            {part_prefix_contents}\n\
+            {part_failing_contents}\n\
             }}"
         )
         .expect("write output file");
     }
 
     output_file.flush().expect("flush output file");
+}
+
+/// Remove all "# " prefixes in order to emulate the rustdoc feature of hiding lines.
+fn unhide(input: String) -> String {
+    let mut output = String::new();
+    for line in input.lines() {
+        if let Some(hidden) = line.strip_prefix("#") {
+            output.push_str(hidden);
+        } else {
+            output.push_str(line);
+        }
+    }
+    output
 }
