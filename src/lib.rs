@@ -31,11 +31,7 @@
 #![allow(clippy::inline_always)]
 #![allow(
     clippy::missing_panics_doc,
-    reason = "panicking is the main point of all docs"
-)]
-#![allow(
-    clippy::needless_doctest_main,
-    reason = "examples need to be include!()able code for panic-example-test"
+    reason = "panicking is the main point of all functions"
 )]
 
 use core::error::Error;
