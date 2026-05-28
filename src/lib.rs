@@ -34,6 +34,7 @@
     reason = "panicking is the main point of all functions"
 )]
 
+use core::any::type_name;
 use core::error::Error;
 
 mod panics;
@@ -139,7 +140,7 @@ impl<T, E: Error> ResultExt<T, E> for Result<T, E> {
 pub trait OptionExt<T> {
     /// When `self` is [`Some`], returns the contained value.
     /// If `self` is [`None`] instead, panics with the message
-    /// “value missing that should always be present”.
+    /// “missing <var>type&nbsp;name</var> that should always be present”.
     ///
     /// Use this like [`unreachable!`]:
     /// when you believe that the error case cannot occur.
@@ -171,7 +172,7 @@ pub trait OptionExt<T> {
 
     /// When `option` is [`Some`], returns the contained value.
     /// If `option` is [`None`] instead, panics with the message
-    /// “handling missing value is not yet implemented”.
+    /// “handling missing <var>type&nbsp;name</var> is not yet implemented”.
     ///
     /// Use this like [`todo!`]:
     /// the code is incomplete and missing value handling should be added.
@@ -209,7 +210,10 @@ impl<T> OptionExt<T> for Option<T> {
     fn none_is_unreachable(self) -> T {
         match self {
             Some(value) => value,
-            None => panic!("value missing that should always be present"),
+            None => panic!(
+                "missing {ty} that should always be present",
+                ty = type_name::<T>(),
+            ),
         }
     }
 
@@ -219,7 +223,10 @@ impl<T> OptionExt<T> for Option<T> {
         match self {
             Some(value) => value,
             None => {
-                panic!("handling missing value is not yet implemented")
+                panic!(
+                    "handling missing {ty} is not yet implemented",
+                    ty = type_name::<T>(),
+                )
             }
         }
     }
@@ -238,8 +245,9 @@ impl<T> OptionExt<T> for Option<T> {
 /// Use this like [`unreachable!`]:
 /// when you believe that the error case cannot occur.
 ///
-/// This is identical to the extension trait method [`OptionExt::none_is_unreachable()`]
+/// This is similar to the extension trait method [`OptionExt::none_is_unreachable()`]
 /// except that it is a `const fn`, and is not a method (so it cannot cause a method name conflict).
+/// Also, due to current restrictions on const evaluation in Rust, it does not print the type name.
 ///
 /// # Example
 ///
@@ -283,8 +291,9 @@ pub const fn none_is_unreachable<T>(option: Option<T>) -> T {
 /// Use this like [`todo!`]:
 /// the code is incomplete and missing value handling should be added.
 ///
-/// This is identical to the extension trait method [`OptionExt::none_is_todo()`]
+/// This is similar to the extension trait method [`OptionExt::none_is_todo()`]
 /// except that it is a `const fn`, and is not a method (so it cannot cause a method name conflict).
+/// Also, due to current restrictions on const evaluation in Rust, it does not print the type name.
 ///
 /// # Example
 ///
