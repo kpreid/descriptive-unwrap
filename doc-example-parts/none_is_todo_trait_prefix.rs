@@ -1,1 +1,1 @@
-use descriptive_unwrap::OptionUnwrapExt as _;
+use descriptive_unwrap::OptionExt as _;

@@ -4,7 +4,7 @@ use std::error::Error;
 use std::fmt;
 use std::panic::{catch_unwind, UnwindSafe};
 
-use descriptive_unwrap::ResultUnwrapExt as _;
+use descriptive_unwrap::ResultExt as _;
 
 /// [`Error`] type for use in tests.
 #[derive(Debug)]

@@ -39,7 +39,7 @@ use core::error::Error;
 mod panics;
 
 /// Alternatives to [`Result::unwrap()`].
-pub trait ResultUnwrapExt<T, E> {
+pub trait ResultExt<T, E> {
     /// When `self` is [`Ok`], returns the contained value.
     /// If `self` is [`Err`] instead, panics with a message indicating that an error case which
     /// should not have been reached was reached, and which includes the complete error message
@@ -107,7 +107,7 @@ pub trait ResultUnwrapExt<T, E> {
     fn _this_trait_is_sealed_and_you_cannot_add_implementations_of_it() -> Sealed;
 }
 
-impl<T, E: Error> ResultUnwrapExt<T, E> for Result<T, E> {
+impl<T, E: Error> ResultExt<T, E> for Result<T, E> {
     #[inline(always)]
     #[track_caller]
     fn err_is_unreachable(self) -> T {
@@ -136,7 +136,7 @@ impl<T, E: Error> ResultUnwrapExt<T, E> for Result<T, E> {
 }
 
 /// Alternatives to [`Option::unwrap()`].
-pub trait OptionUnwrapExt<T> {
+pub trait OptionExt<T> {
     /// When `self` is [`Some`], returns the contained value.
     /// If `self` is [`None`] instead, panics with the message
     /// “value missing that should always be present”.
@@ -203,7 +203,7 @@ pub trait OptionUnwrapExt<T> {
     fn _this_trait_is_sealed_and_you_cannot_add_implementations_of_it() -> Sealed;
 }
 
-impl<T> OptionUnwrapExt<T> for Option<T> {
+impl<T> OptionExt<T> for Option<T> {
     #[inline(always)]
     #[track_caller]
     fn none_is_unreachable(self) -> T {
@@ -238,7 +238,7 @@ impl<T> OptionUnwrapExt<T> for Option<T> {
 /// Use this like [`unreachable!`]:
 /// when you believe that the error case cannot occur.
 ///
-/// This is identical to the extension trait method [`OptionUnwrapExt::none_is_unreachable()`]
+/// This is identical to the extension trait method [`OptionExt::none_is_unreachable()`]
 /// except that it is a `const fn`, and is not a method (so it cannot cause a method name conflict).
 ///
 /// # Example
@@ -283,7 +283,7 @@ pub const fn none_is_unreachable<T>(option: Option<T>) -> T {
 /// Use this like [`todo!`]:
 /// the code is incomplete and missing value handling should be added.
 ///
-/// This is identical to the extension trait method [`OptionUnwrapExt::none_is_todo()`]
+/// This is identical to the extension trait method [`OptionExt::none_is_todo()`]
 /// except that it is a `const fn`, and is not a method (so it cannot cause a method name conflict).
 ///
 /// # Example

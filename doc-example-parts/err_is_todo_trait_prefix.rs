@@ -1,1 +1,1 @@
-use descriptive_unwrap::ResultUnwrapExt as _;
+use descriptive_unwrap::ResultExt as _;
