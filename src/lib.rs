@@ -1,5 +1,5 @@
-//! Replacements for [`Result::unwrap()`] and [`Option::unwrap()`] whose overall function
-//! is the same, but with meaningful names and [`Error`] formatting,
+//! This library provides replacements for [`Result::unwrap()`] and [`Option::unwrap()`] whose
+//! overall function is the same, but with meaningful names and [`Error`] formatting,
 //! for the benefit of developers and users.
 //!
 //! **For developers:**
