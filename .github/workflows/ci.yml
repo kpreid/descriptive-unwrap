@@ -19,7 +19,7 @@ jobs:
   test:
     strategy:
       matrix:
-        toolchain: [stable, beta, nightly, 1.81.0]
+        toolchain: [stable, beta, nightly, 1.83.0]
 
     runs-on: ubuntu-latest
     continue-on-error: ${{ matrix.toolchain != 'stable' }}

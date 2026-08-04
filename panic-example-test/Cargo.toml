@@ -2,7 +2,7 @@
 name = "panic-example-test"
 description = "Tests for the text produced by using descriptive-unwrap."
 publish = false
-edition = "2024"
+edition = "2021"
 
 [[bin]]
 name = "panic-example-test"
