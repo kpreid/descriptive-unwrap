@@ -25,11 +25,13 @@ jobs:
     continue-on-error: ${{ matrix.toolchain != 'stable' }}
 
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
 
     - name: Install Rust toolchain
       run: |
-          rustup toolchain install "${{ matrix.toolchain }}" --profile=minimal--component=rustfmt
+          rustup toolchain install "${{ matrix.toolchain }}" --profile=minimal --component=rustfmt
           rustup override set "${{ matrix.toolchain }}"
 
     - run: cargo test --no-run
@@ -49,7 +51,9 @@ jobs:
       RUSTFLAGS: '-Dwarnings'
 
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
 
     - name: Install Rust toolchain
       run: |
@@ -64,7 +68,9 @@ jobs:
   fmt:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - run: cargo fmt --check
 
   # Run mutation testing against the changed code
@@ -74,12 +80,13 @@ jobs:
     # Running on push would require more work to determine the base revision
     if: github.event_name == 'pull_request'
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           # Needed to ensure `main` branch is needed
           fetch-depth: 0
+          persist-credentials: false
 
-      - uses: Swatinem/rust-cache@v2.8.1
+      - uses: Swatinem/rust-cache@c19371144df3bb44fab255c43d04cbc2ab54d1c4 # v2.9.1
         with:
           # Job's likely to fail and yet have useful cache material.
           cache-on-failure: true
@@ -89,12 +96,12 @@ jobs:
       - name: Relative diff
         run: |
           git branch -av
-          git diff origin/${{ github.base_ref }}.. | tee git.diff
+          git diff origin/${GITHUB_BASE_REF}.. | tee git.diff
       
       - name: Mutants
         run: cargo mutants --in-diff git.diff -- --all-features
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: ${{ always() }}
         with:
           name: mutants-incremental.out
@@ -104,10 +111,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
 
     - name: Check semver
-      uses: obi1kenobi/cargo-semver-checks-action@v2.8
+      uses: obi1kenobi/cargo-semver-checks-action@5b298c9520f7096a4683c0bd981a7ac5a7e249ae # v2.8
       # Use workspace target dir for cargo install's build, so that the build will be cached.
       env:
         CARGO_TARGET_DIR: target/
