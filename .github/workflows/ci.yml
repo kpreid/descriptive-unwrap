@@ -112,5 +112,5 @@ jobs:
       env:
         CARGO_TARGET_DIR: target/
       with:
-        package: "exhaust"
+        package: "descriptive-unwrap"
 
