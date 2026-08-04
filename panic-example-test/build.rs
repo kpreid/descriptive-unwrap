@@ -1,15 +1,17 @@
 //! Processes the failing doctest code in `../doc-example-parts/` into functions that can be
 //! compiled into the `panic-example-test` binary.
-//! This binary is then used to verify that the panic output displayed in the documentation is
-//! exactly identical to the actual output.
+//! This binary is then used to verify that the panic output displayed in the documentation matches
+//! the actual output of running the program.
 
 use std::fs;
 use std::io::Write as _;
 use std::path::Path;
 
 // TODO: Use our own library's formatting instead of expect()!
-// We need a function which means “our error handling strategy is panic()”,
-// without the specific meanings "todo" or "unreachable".
+// We need either:
+// 1. a `Result` function which means “our error handling strategy is panic()”,
+//    without the specific meanings "todo" or "unreachable",
+// 2. a function that panics, with the provided message and error.
 
 fn main() {
     let part_directory = Path::new(&env!("CARGO_MANIFEST_DIR")).join("../doc-example-parts/");
