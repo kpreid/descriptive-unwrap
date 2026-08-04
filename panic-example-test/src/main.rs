@@ -8,6 +8,8 @@ fn main() {
     let args_strs: Vec<&str> = args_strings.iter().map(String::as_str).collect();
 
     match args_strs[1..] {
+        ["descriptive_unwrap::err_is_unreachable"] => generated::err_is_unreachable_fn(),
+        ["descriptive_unwrap::err_is_todo"] => generated::err_is_todo_fn(),
         ["descriptive_unwrap::none_is_unreachable"] => generated::none_is_unreachable_fn(),
         ["descriptive_unwrap::none_is_todo"] => generated::none_is_todo_fn(),
         ["Option::none_is_unreachable"] => generated::none_is_unreachable_trait(),

@@ -129,6 +129,7 @@ pub trait ResultExt<T, E> {
     /// ```text
     #[doc = include_str!("../doc-example-parts/err_is_todo_trait.stderr")]
     /// ```
+    // TODO: Create a better example which has a `source` chain of more than one element.
     fn err_is_todo(self) -> T;
 
     #[doc(hidden)]
@@ -355,6 +356,81 @@ pub const fn none_is_todo<T>(option: Option<T>) -> T {
             panic!("handling missing value is not yet implemented")
         }
     }
+}
+
+/// When `self` is [`Ok`], returns the contained value.
+/// If `self` is [`Err`] instead, panics with a message indicating that an error case which
+/// should not have been reached was reached, and which includes the complete error message
+/// and source chain of the error value.
+///
+/// Use this like [`unreachable!`]:
+/// when you believe that the error case cannot occur.
+///
+/// This is similar to the extension trait method [`ResultExt::err_is_unreachable()`]
+/// except that it is not a method (so it cannot cause a method name conflict).
+///
+/// # Example
+///
+/// ```rust
+#[doc = include_str!("../doc-example-parts/err_is_unreachable_fn_prefix.rs")]
+///
+/// let constant_addr: IpAddr = err_is_unreachable("192.168.0.1".parse());
+/// ```
+///
+/// If instead there is an error, it will panic with a message using the `Display` formatting
+/// of the error value:
+///
+/// ```rust,should_panic
+#[doc = include_str!("../doc-example-parts/err_is_unreachable_fn_prefix.rs")]
+///
+#[doc = include_str!("../doc-example-parts/err_is_unreachable_fn_failing.rs")]
+/// ```
+///
+/// ```text
+#[doc = include_str!("../doc-example-parts/err_is_unreachable_fn.stderr")]
+/// ```
+#[inline(always)]
+#[track_caller]
+pub fn err_is_unreachable<T, E: Error>(result: Result<T, E>) -> T {
+    ResultExt::err_is_unreachable(result)
+}
+
+/// When `self` is [`Ok`], returns the contained value.
+/// If `self` is [`Err`] instead, panics with a message indicating that error handling is
+/// not yet implemented.
+///
+/// Use this like [`todo!`]:
+/// the code is incomplete and error handling should be added.
+///
+/// This is similar to the extension trait method [`ResultExt::err_is_todo()`]
+/// except that it is not a method (so it cannot cause a method name conflict).
+///
+/// # Example
+///
+/// ```rust
+#[doc = include_str!("../doc-example-parts/err_is_todo_fn_prefix.rs")]
+///
+/// let input = [0x48, 0x65, 0x6c, 0x6c, 0x6f];
+///
+/// let string = err_is_todo(std::str::from_utf8(&input));
+/// println!("{string}");
+/// ```
+///
+/// If instead there is an error, it will panic with a message using the `Display` formatting
+/// of the error value:
+///
+/// ```rust,should_panic
+#[doc = include_str!("../doc-example-parts/err_is_todo_fn_prefix.rs")]
+///
+#[doc = include_str!("../doc-example-parts/err_is_todo_fn_failing.rs")]
+/// ```
+///
+/// ```text
+#[doc = include_str!("../doc-example-parts/err_is_todo_fn.stderr")]
+/// ```
+// TODO: Create a better example which has a `source` chain of more than one element.
+pub fn err_is_todo<T, E: Error>(result: Result<T, E>) -> T {
+    ResultExt::err_is_todo(result)
 }
 
 /// This type cannot be constructed outside this crate,
