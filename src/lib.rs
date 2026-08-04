@@ -39,6 +39,34 @@ use core::error::Error;
 
 mod panics;
 
+/// Importing the contents of this module will import the extension traits
+/// [`ResultExt`] and [`OptionExt`].
+///
+/// It will not add their names, only their methods.
+///
+/// # Example
+///
+/// ```
+/// use descriptive_unwrap::prelude::*;
+/// use std::num::NonZeroU32;
+///
+/// let x = NonZeroU32::new(123).none_is_unreachable();
+/// assert_eq!(x.get(), 123);
+/// ```
+///
+/// But no names are brought into scope:
+///
+/// ```compile_fail
+/// use descriptive_unwrap::prelude::*;
+///
+/// trait Foo: OptionExt {}
+/// ```
+///
+pub mod prelude {
+    pub use crate::OptionExt as _;
+    pub use crate::ResultExt as _;
+}
+
 /// Alternatives to [`Result::unwrap()`].
 pub trait ResultExt<T, E> {
     /// When `self` is [`Ok`], returns the contained value.
