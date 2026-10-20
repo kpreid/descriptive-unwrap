@@ -12,4 +12,4 @@ test = false # no unit tests
 descriptive-unwrap = { path = "../" }
 
 [dev-dependencies]
-trycmd = { version = "0.15.11" }
+trycmd = { version = "1.0.0" }
